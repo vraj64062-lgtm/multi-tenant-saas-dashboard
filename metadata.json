@@ -1,0 +1,8 @@
+{
+  "name": "Multi-Tenant SaaS Analytics Dashboard",
+  "description": "A secure full-stack multi-tenant SaaS analytics panel utilizing JWT sessions, custom organization scoping, roles, Recharts data visualizers, and Stripe checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

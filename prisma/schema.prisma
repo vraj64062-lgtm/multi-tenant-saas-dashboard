@@ -1,0 +1,67 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Organization {
+  id                   String            @id @default(uuid())
+  name                 String
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  plan                 String            @default("FREE") // "FREE" or "PRO"
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  users                User[]
+  invites              Invite[]
+  analyticsRecords     AnalyticsRecord[]
+}
+
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  passwordHash   String
+  name           String
+  role           String         @default("MEMBER") // "ADMIN" or "MEMBER"
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  refreshTokens  RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Invite {
+  id             String       @id @default(uuid())
+  email          String
+  role           String       @default("MEMBER") // "ADMIN" or "MEMBER"
+  token          String       @unique
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  accepted       Boolean      @default(false)
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+}
+
+model AnalyticsRecord {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  date           DateTime
+  activeUsers    Int
+  revenue        Float
+  pageViews      Int
+  signups        Int
+  createdAt      DateTime     @default(now())
+}
