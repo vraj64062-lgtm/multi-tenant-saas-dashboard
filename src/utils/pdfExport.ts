@@ -99,7 +99,7 @@ export const exportPDFReport = (user: User, summary: Summary, records: Analytics
     doc.setFont("helvetica", "bold");
     doc.setFontSize(7);
     doc.setTextColor(successColor[0], successColor[1], successColor[2]);
-    doc.text("● CRYPTOGRAPHICALLY ISOLATED", margin, pageHeight - 13);
+    doc.text("● TENANT-ISOLATED VIA JWT", margin, pageHeight - 13);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7);
@@ -323,5 +323,14 @@ export const exportPDFReport = (user: User, summary: Summary, records: Analytics
   // Save the report with organization and date in file name
   const formattedDate = new Date().toISOString().split("T")[0];
   const filename = `${user.orgName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-report-${formattedDate}.pdf`;
-  doc.save(filename);
+  
+  let blobUrl = "";
+  try {
+    const blob = doc.output("blob");
+    blobUrl = URL.createObjectURL(blob);
+  } catch (blobErr) {
+    console.error("Error creating PDF Blob:", blobErr);
+  }
+
+  return { doc, filename, blobUrl };
 };

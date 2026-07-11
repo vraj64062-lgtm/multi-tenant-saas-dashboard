@@ -125,6 +125,7 @@ export const inviteMember = async (req: AuthRequest, res: Response) => {
         email: invite.email,
         role: invite.role,
         token: invite.token,
+        createdAt: invite.createdAt,
         expiresAt: invite.expiresAt,
         inviteLink,
       },

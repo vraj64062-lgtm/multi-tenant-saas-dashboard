@@ -490,7 +490,7 @@ export const AdminPanel: React.FC = () => {
                           </span>
                         </td>
                         <td className="px-4 py-3 text-right text-gray-400 font-mono text-[10px]">
-                          {new Date(inv.createdAt).toLocaleDateString()}
+                          {inv.createdAt ? new Date(inv.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "N/A"}
                         </td>
                         <td className="px-4 py-3 text-center">
                           <button
